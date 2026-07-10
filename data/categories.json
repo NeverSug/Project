@@ -1,0 +1,32 @@
+[
+    {
+        "id": 0,
+        "name": "PHP разработка",
+        "slug": "php",
+        "description": "Статьи о PHP, фреймворках и бэкенд разработке"
+    },
+    {
+        "id": 1,
+        "name": "Frontend",
+        "slug": "frontend",
+        "description": "HTML, CSS, JavaScript и современные фронтенд технологии"
+    },
+    {
+        "id": 2,
+        "name": "Базы данных",
+        "slug": "database",
+        "description": "SQL, MySQL, PostgreSQL и работа с данными"
+    },
+    {
+        "id": 3,
+        "name": "Безопасность",
+        "slug": "security",
+        "description": "Защита веб-приложений и лучшие практики безопасности"
+    },
+    {
+        "id": 4,
+        "name": "dcfvgbhnjm",
+        "slug": "scdvfbgnhjmk,",
+        "description": "csdvfbgnh jmk,"
+    }
+]
