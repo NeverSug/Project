@@ -118,7 +118,7 @@ body {
         }
         .result{
             color: green; 
-            margin-left: 10px; 
+            /* margin-left: 10px;  */
             font-weight: bold;
             font-size: 16px;
         }
@@ -148,3 +148,19 @@ body {
         .btn{
             padding: 10px;
         }
+        .clear{
+            padding: 5px 10px;
+            margin: 10px;
+        }
+      .like-button {
+  font-size: 1em;
+  color: #0c0c0c;
+  animation: pulse 1s steps(2);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+        

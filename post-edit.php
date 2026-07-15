@@ -6,6 +6,8 @@ try {
     $categories = getCategories();
     $category_id = null;
     $post = [];
+    $action = $_GET['action'] ?? '';
+    // dd($action);
 
     if (isset($_GET['action']) && $_GET['action'] === 'edit') {
         $id = (int)$_GET['id'];
@@ -31,23 +33,19 @@ try {
             $errors['content'] = 'Раскройте тему. Нужно больше информации';
         }
         if (empty($errors)) {
-            $posts = getPosts();
-            $posts[$id] = [
+            updatePost([
                 'id' => $id,
                 'category_id' => $category_id,
                 'title' => $title,
-                'content' => $content,
-                'date' => $posts[$id]['date'],
-                'author' => $posts[$id]['author'],
-            ];
-            $data = dirname(__DIR__) . '/data/posts.json';
-            putContent($posts, $data);
+                'content' => $content
+            ]);
+
             header("Location: post.php?id=$id&success=edit");
             die();
         }
-        if ($_GET['action'] !== 'edit' || $_GET['action'] !== 'save') {
-            throw new OutOfBoundsException(("Неверный action"));
-        }
+    }
+    if ($_GET['action'] !== 'edit' && $_GET['action'] !== 'save') {
+        throw new OutOfBoundsException(("Неверный action"));
     }
 } catch (OutOfBoundsException $e) {
     $errorId = 'ERR_' . date('Ymd_His') . '_' . uniqid();

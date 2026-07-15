@@ -1,6 +1,6 @@
 <?php
 
-function putContent(array $posts, string $data)
+function upDate(string $data, array $posts)
 {
     $result = file_put_contents($data, json_encode($posts, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     if (!$result) {
@@ -8,7 +8,7 @@ function putContent(array $posts, string $data)
     }
 }
 
-function redirectToError($code, $message = null, $errorId = null): never
+function redirectToError(string $code, $message = null, $errorId = null): never
 {
     $params = ['code' => $code];
 

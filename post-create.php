@@ -14,24 +14,40 @@ try {
         $title = htmlspecialchars($_POST['title'] ?? '');
         $content = htmlspecialchars($_POST['content'] ?? '');
         $category_id = (int)($_POST['category_id'] ?? null);
+        $author = htmlspecialchars($_POST['author'] ?? '');
+        $date = htmlspecialchars($_POST['date'] ?? date('Y-m-d H:i:s'));
 
         $errors = [];
 
         if (empty($title)) {
             $errors['title'] = 'Укажите заголовок. Без него рейтинг поста будет ниже';
-        };
+        }
         if (empty($content)) {
             $errors['content'] = 'Раскройте тему. Иначе пользователи не поймут, о чем Вы пишите';
-        };
+        }
 
-        $lenghtContent = mb_strlen($content);
-        if ($lenghtContent <= 5 && 0 < $lenghtContent) {
+        $lengthContent = mb_strlen($content);
+        if ($lengthContent <= 5 && 0 < $lengthContent) {
             $errors['content'] = 'Раскройте тему. Нужно больше информации';
+        }
+
+        if (empty($author)) {
+            $errors['author'] = 'Назовите автора. Он не должен оставаться инкогнито';
+        }
+        if (empty($date)) {
+            $errors['date'] = 'Укажите дату в формате "Y-m-d H:i:s". Пользователям важна актуальность поста';
         }
 
         if (empty($errors)) {
 
-            $result = savePost($category_id, $title, $content);
+            $result = savePost([
+                'category_id' => $category_id,
+                'title' => $title,
+                'content' => $content,
+                'date' => $date,
+                'author' => $author,
+                'like' => 0
+            ]);
 
             header("Location: post.php?id=$result&success=ok");
             die();
@@ -103,6 +119,20 @@ try {
         </label>
         <?php if (!empty($errors['content'])): ?>
             <p class="error"><?= htmlspecialchars($errors['content']) ?></p>
+        <?php endif; ?>
+        <label for="author">
+            Автор поста:
+            <input type="text" name="author" value="<?= htmlspecialchars($author ?? '') ?>">
+        </label>
+        <?php if (!empty($errors['author'])): ?>
+            <p class="error"><?= htmlspecialchars($errors['author']) ?></p>
+        <?php endif; ?>
+        <label for="date">
+            Дата публикации:
+            <input type="text" name="date" value="<?= htmlspecialchars($date ?? date('Y-m-d H:i:s')) ?>">
+        </label>
+        <?php if (!empty($errors['date'])): ?>
+            <p class="error"><?= htmlspecialchars($errors['date']) ?></p>
         <?php endif; ?>
         <button class="btn" type="submit">Создать</button>
     </form>

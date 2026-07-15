@@ -1,21 +1,39 @@
 <?php
-function deletePost(array $posts, int $id)
-{
-    unset($posts[$id]);
-    $data = dirname(__DIR__) . '/data/posts.json';
-    putContent($posts, $data);
-}
-
-function savePost(int $category_id, string $title, string $content): int
+function deletePost(int $id)
 {
     $posts = getPosts();
-    $posts[] = [
-        'category_id' => $category_id,
-        'title' => $title,
-        'content' => $content,
-        'date' => date('Y-m-d H:i:s'),
-        'author' => '',
+    unset($posts[$id]);
+    $data = dirname(__DIR__) . '/data/posts.json';
+    upDate($data, $posts);
+}
+
+function updatePost(array $post): void
+{
+    $id = $post['id'];
+    $posts = getPosts();
+    $post[$id] = [
+        ...$post,
+        ...[
+            'date'      => $posts[$id]['date'] ?? date('Y-m-d H:i:s'),
+            'author'    => $posts[$id]['author'] ?? 'Guest',
+            'like' => $posts[$id]['like']
+        ]
     ];
+
+    $data = dirname(__DIR__) . '/data/posts.json';
+    upDate($data, $posts);
+}
+function savePost(array $newPost): int
+{
+    $posts = getPosts();
+    $postToSave = [
+        'category_id' => $newPost['category_id'] ?? null,
+        'title'     => $newPost['title'] ?? '',
+        'content'   => $newPost['content'] ?? '',
+        'date'      => $newPost['date'] ?? date('Y-m-d H:i:s'),
+        'author'    => $newPost['author'] ?? '',
+    ];
+    $posts[] = $postToSave;
     $lastKey = array_key_last($posts);
     $posts[$lastKey]['id'] = $lastKey;
     $posts[$lastKey] = array_merge(['id' => $lastKey], $posts[$lastKey]);
@@ -25,7 +43,7 @@ function savePost(int $category_id, string $title, string $content): int
     $firstPost = reset($posts);
     $newId = $firstPost['id'];
     $data = dirname(__DIR__) . '/data/posts.json';
-    putContent($posts, $data);
+    upDate($data, $posts);
 
     return $newId;
 }
