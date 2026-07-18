@@ -12,7 +12,7 @@ function saveCategory(string $name, string $slug, string $description): int
     $category[$lastKey]['id'] = $lastKey;
     $category[$lastKey] = array_merge(['id' => $lastKey], $category[$lastKey]);
     $data = dirname(__DIR__) . '/data/categories.json';
-    putContent($category, $data);
+    writeFileData($data, $category);
 
     return $lastKey;
 }

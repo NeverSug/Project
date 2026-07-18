@@ -1,6 +1,32 @@
 <?php
 
-function upDate(string $data, array $posts)
+function render(string $page, $params = []): string
+{
+    return renderTemplate('layouts/main', [
+        'menu' => renderTemplate('components/menu', $params),
+        'content' => renderTemplate($page, $params),
+        'footer' => renderTemplate('components/footer', $params),
+        'titleSite' => $params['titleSite'] ?? 'Главная'
+
+
+    ]);
+}
+
+function renderTemplate(string $page, $params = []): string
+{
+
+    extract($params, EXTR_SKIP);
+    $fileName = dirname(__DIR__) . '/templates/' . $page . '.php';
+    ob_start();
+    if (file_exists($fileName)) {
+        include $fileName;
+    } else {
+        throw new OutOfBoundsException("Страницы {$page} не существует.");
+    }
+    return ob_get_clean();
+}
+
+function writeFileData(string $data, array $posts)
 {
     $result = file_put_contents($data, json_encode($posts, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     if (!$result) {
@@ -21,7 +47,7 @@ function redirectToError(string $code, $message = null, $errorId = null): never
     }
 
     $queryString = http_build_query($params);
-    header("Location: error-tmp.php?{$queryString}");
+    header("Location: /?page=error-tmp&{$queryString}");
     exit();
 }
 

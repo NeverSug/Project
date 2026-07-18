@@ -23,6 +23,10 @@ body {
         }
 
         .content {
+            display: flex;
+            justify-content: baseline;
+            align-items: center;
+            gap: 10px;
             background: #f9f9f9;
             padding: 15px;
             border-left: 4px solid #ccc;
@@ -153,14 +157,19 @@ body {
             margin: 10px;
         }
       .like-button {
-  font-size: 1em;
-  color: #0c0c0c;
-  animation: pulse 1s steps(2);
-}
+        font-size: 1em;
+        color: #0c0c0c;
+        animation: pulse 1s steps(2);
+        }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-        
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+   .img, img{
+    background-color: rgb(124, 124, 209);
+    width: 100px;
+    height: 100px;
+
+   }     

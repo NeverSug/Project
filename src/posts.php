@@ -4,14 +4,14 @@ function deletePost(int $id)
     $posts = getPosts();
     unset($posts[$id]);
     $data = dirname(__DIR__) . '/data/posts.json';
-    upDate($data, $posts);
+    writeFileData($data, $posts);
 }
 
 function updatePost(array $post): void
 {
     $id = $post['id'];
     $posts = getPosts();
-    $post[$id] = [
+    $posts[$id] = [
         ...$post,
         ...[
             'date'      => $posts[$id]['date'] ?? date('Y-m-d H:i:s'),
@@ -21,7 +21,7 @@ function updatePost(array $post): void
     ];
 
     $data = dirname(__DIR__) . '/data/posts.json';
-    upDate($data, $posts);
+    writeFileData($data, $posts);
 }
 function savePost(array $newPost): int
 {
@@ -32,6 +32,7 @@ function savePost(array $newPost): int
         'content'   => $newPost['content'] ?? '',
         'date'      => $newPost['date'] ?? date('Y-m-d H:i:s'),
         'author'    => $newPost['author'] ?? '',
+        'image' => $newPost['image'] ?? null
     ];
     $posts[] = $postToSave;
     $lastKey = array_key_last($posts);
@@ -43,7 +44,7 @@ function savePost(array $newPost): int
     $firstPost = reset($posts);
     $newId = $firstPost['id'];
     $data = dirname(__DIR__) . '/data/posts.json';
-    upDate($data, $posts);
+    writeFileData($data, $posts);
 
     return $newId;
 }
