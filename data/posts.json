@@ -1,33 +1,43 @@
 {
+    "22": {
+        "id": "22",
+        "category_id": 6,
+        "title": "transport",
+        "content": "bolschegrusyi",
+        "image": "6a5c9f3414935_2026-07-19_09-56-04_jpg",
+        "date": "2026-07-19 09:54:57",
+        "author": "sveta",
+        "like": 3
+    },
     "21": {
         "id": "21",
         "category_id": 1,
         "title": "efrgthyjutiky",
         "content": "rftgehyrjtu5500",
-        "image": "6a5bd12380260_2026-07-18_19-16-51_png",
+        "image": "",
         "date": "2026-07-18 17:37:31",
         "author": "trgehny",
-        "like": 11
+        "like": 61
     },
     "20": {
         "id": "20",
         "category_id": 3,
         "title": "Безопасность веб-приложений",
         "content": "Защита от XSS, CSRF и SQL-инъекций критически важна. Всегда экранируйте вывод, используйте подготовленные запросы и валидируйте пользовательский ввод.55",
-        "image": "6a5bba806a721_2026-07-18_17-40-16_jpg",
+        "image": "",
         "date": "2024-01-22",
         "author": "Ольга",
-        "like": null
+        "like": 21
     },
     "19": {
         "id": "19",
         "category_id": 1,
         "title": "Современный CSS: Flexbox и Grid",
         "content": "Flexbox и Grid - мощные инструменты для создания адаптивных макетов. Flexbox хорош для одномерной верстки, а Grid для двухмерной. Освойте их для профессиональной верстки.",
-        "image": "6a5bba8cd8b54_2026-07-18_17-40-28_jpg",
+        "image": "",
         "date": "2024-01-21",
         "author": "Игорь",
-        "like": null
+        "like": 10
     },
     "18": {
         "id": "18",
@@ -37,7 +47,7 @@
         "image": "6a5bba9976169_2026-07-18_17-40-41_jpg",
         "date": "2024-01-20",
         "author": "Анна",
-        "like": null
+        "like": 6
     },
     "17": {
         "id": 17,

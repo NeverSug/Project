@@ -1,4 +1,7 @@
 <?php
+
+namespace App;
+
 function deletePost(int $id)
 {
     $posts = getPosts();
@@ -53,7 +56,7 @@ function getPost(int $id): array
 {
     $posts = getPosts();
     if (!isset($posts[$id])) {
-        throw new OutOfBoundsException("Пост не найден");
+        throw new \OutOfBoundsException("Пост не найден");
     }
 
     return $posts[$id];
@@ -64,7 +67,7 @@ function getPosts(): array
     $postsData = readFileData('/data/posts.json');
 
     if (!$postsData) {
-        throw new RuntimeException("Ошибка сервера");
+        throw new \RuntimeException("Ошибка сервера");
     }
 
     return decodeData($postsData);

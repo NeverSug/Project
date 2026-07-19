@@ -1,4 +1,4 @@
-<p><a href="?page=post-create">+ Создать пост</a></p>
+<p><a href="?page=postcreate">+ Создать пост</a></p>
 <div id="messages"></div>
 <?php if (!empty($success)): ?>
     <p class="result"><?= $success ?></p>
@@ -13,7 +13,7 @@
                 <div class="post-title">
                     <h2><a href="/?page=post&id=<?= htmlspecialchars($post['id']) ?>"><?= htmlspecialchars($post['title']) ?></a></h2>
                     <div>
-                        <a href="/?page=post-edit&action=edit&id=<?= $post['id'] ?>">Редактировать</a> |
+                        <a href="/?page=postedit&action=edit&id=<?= $post['id'] ?>">Редактировать</a> |
                         <a href="/?page=posts&action=delete&id=<?= $post['id'] ?>">Удалить</a>
                         <button type="button" data-id="<?= $post['id'] ?>" class="btn deleteBtn">Удалить</button>
                     </div>

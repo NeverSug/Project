@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 function saveCategory(string $name, string $slug, string $description): int
 {
     $category = getCategories();
@@ -43,7 +45,7 @@ function getCategoryBySlug(string $slug): array
 
 
     if (empty($filtered)) {
-        throw new OutOfBoundsException("Категория с slug '{$slug}' не найдена");
+        throw new \OutOfBoundsException("Категория с slug '{$slug}' не найдена");
     }
 
     return array_values($filtered)[0];
@@ -54,7 +56,7 @@ function getCategoryById(int $id): array
     $category = getCategories();
 
     if (!isset($category[$id])) {
-        throw new OutOfBoundsException("Категория не найдена");
+        throw new \OutOfBoundsException("Категория не найдена");
     }
 
     return $category[$id];
@@ -64,7 +66,7 @@ function getCategories()
 {
     $categoriesData = readFileData('/data/categories.json');
     if (!$categoriesData) {
-        throw new RuntimeException("Ошибка сервера");
+        throw new \RuntimeException("Ошибка сервера");
     }
     return decodeData($categoriesData);
 }

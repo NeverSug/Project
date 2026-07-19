@@ -12,7 +12,7 @@
             <option <?= htmlspecialchars(($category['id'] === $category_id) ? 'selected' : '') ?>value="<?= htmlspecialchars($category['id']) ?>"><?= htmlspecialchars($category['name']) ?></option>
         <?php endforeach; ?>
     </select>
-    <p><a href="/?page=category-create">+ Создать категорию</a></p>
+    <p><a href="/?page=categorycreate">+ Создать категорию</a></p>
     <label for="title">
         Заголовок поста:
         <input type="text" name="title" value="<?= htmlspecialchars($title ?? '') ?>">

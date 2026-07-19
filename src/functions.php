@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 function render(string $page, $params = []): string
 {
     return renderTemplate('layouts/main', [
@@ -21,7 +23,7 @@ function renderTemplate(string $page, $params = []): string
     if (file_exists($fileName)) {
         include $fileName;
     } else {
-        throw new OutOfBoundsException("Страницы {$page} не существует.");
+        throw new \OutOfBoundsException("Страницы {$page} не существует.");
     }
     return ob_get_clean();
 }
@@ -30,7 +32,7 @@ function writeFileData(string $data, array $posts)
 {
     $result = file_put_contents($data, json_encode($posts, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     if (!$result) {
-        throw new Exception("Не удалось сохранить пост");
+        throw new \Exception("Не удалось сохранить пост");
     }
 }
 
@@ -47,7 +49,7 @@ function redirectToError(string $code, $message = null, $errorId = null): never
     }
 
     $queryString = http_build_query($params);
-    header("Location: /?page=error-tmp&{$queryString}");
+    header("Location: /?page=errorhendler&{$queryString}");
     exit();
 }
 
@@ -59,7 +61,7 @@ function decodeData(string $data): array
     $parsedData = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
 
     if (!is_array($parsedData)) {
-        throw new RuntimeException("Данные в файле не являются строкой");
+        throw new \RuntimeException("Данные в файле не являются строкой");
     }
 
     return $parsedData;
@@ -70,17 +72,17 @@ function readFileData(string $fileName): string
     $filePath = dirname(__DIR__) . "/$fileName";
 
     if (!file_exists($filePath)) {
-        throw new RuntimeException("Файл не найден");
+        throw new \RuntimeException("Файл не найден");
     }
 
     $fileData = file_get_contents($filePath);
 
     if ($fileData === false) {
-        throw new RuntimeException("Не удалось прочитать файл");
+        throw new \RuntimeException("Не удалось прочитать файл");
     }
 
     if (empty($fileData)) {
-        throw new RuntimeException("Файл пуст");
+        throw new \RuntimeException("Файл пуст");
     }
 
     return $fileData;

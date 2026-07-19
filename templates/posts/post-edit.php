@@ -2,7 +2,7 @@
 
 <h1>Изменение поста</h1>
 
-<form action="/?page=post-edit&action=save" method="post" class="post-create" enctype="multipart/form-data">
+<form action="/?page=postedit&action=save" method="post" class="post-create" enctype="multipart/form-data">
     <input type="text" name="id" readonly hidden value="<?= htmlspecialchars($post['id'] ?? $id ?? '') ?>">
     <h3>Категория</h3>
     <select name="category_id">
@@ -46,7 +46,7 @@
                 (
                     async () => {
                         try {
-                            const response = await fetch(`/?page=post-edit&action=delete_image&id=${id}&ajax`, {
+                            const response = await fetch(`/?page=postedit&action=delete_image&id=${id}&ajax`, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
