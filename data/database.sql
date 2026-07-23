@@ -27,22 +27,23 @@ CREATE TABLE IF NOT EXISTS "posts"
     FOREIGN KEY ("user_id") REFERENCES "users" ("id")
 );
 
-CREATE TABLE IF NOT EXISTS "likes"
-(
-    "post_id" INTEGER NOT NULL,
-    "user_id" VARCHAR NOT NULL,
-    PRIMARY KEY ("post_id", "user_id")
-);
+CREATE TABLE likes (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "post_id" INTEGER NOT NULL,
+  "user_id" INTEGER NULL,
+  "guest_session_id" TEXT NULL,
+  "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+)
 
-CREATE TABLE IF NOT EXISTS "users"
-(
-    "id"            INTEGER NOT NULL,
-    "nickname"      VARCHAR NOT NULL UNIQUE,
-    "email"         VARCHAR NOT NULL UNIQUE,
-    "password_hash" TEXT NOT NULL,
-    "created_at"    DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY ("id")
-);
+CREATE TABLE "users" (
+  "id" INTEGER NOT NULL,
+  "nickname" VARCHAR NOT NULL UNIQUE,
+  "email" VARCHAR NOT NULL UNIQUE,
+  "password_hash" TEXT NOT NULL,
+  "created_at" DATETIME DEFAULT CURRENT_TIMESTAMP,
+  "is_admin" TINYINT (1) NOT NULL DEFAULT 0,
+  PRIMARY KEY ("id")
+)
 
 --заполнение данными таблицы  categories
 INSERT INTO categories
