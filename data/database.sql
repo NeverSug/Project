@@ -44,6 +44,8 @@ CREATE TABLE IF NOT EXISTS "likes" (
 )
 
 
+--даем права админа админу
+UPDATE users SET is_admin = 1 WHERE nickname = 'admin';
 
 --заполнение данными таблицы  categories
 INSERT INTO categories
