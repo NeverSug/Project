@@ -12,6 +12,7 @@
     <?= $menu ?>
     <?= $content ?>
     <?= $footer ?>
+
 </body>
 
 </html>

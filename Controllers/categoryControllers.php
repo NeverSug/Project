@@ -29,7 +29,11 @@ function categorycreateControllers(): void
 
         if (empty($errors)) {
 
-            $result = saveCategory($name, $slug, $description);
+            saveCategory([
+                'name' => $name,
+                'slug' => $slug,
+                'description' => $description
+            ]);
 
             header("Location: /?page=postcreate&success=okcat");
             die();
@@ -40,6 +44,6 @@ function categorycreateControllers(): void
         'errors' => $errors ?? null,
         'name' => $name ?? '',
         'slug' => $slug ?? '',
-        'description' => $description ?? ''
+        'description' => $description ?? '',
     ]);
 }

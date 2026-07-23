@@ -12,17 +12,18 @@
             <div class="post-preview" id="<?= $post['id'] ?>">
                 <div class="post-title">
                     <h2><a href="/?page=post&id=<?= htmlspecialchars($post['id']) ?>"><?= htmlspecialchars($post['title']) ?></a></h2>
+
                     <div>
                         <a href="/?page=postedit&action=edit&id=<?= $post['id'] ?>">Редактировать</a> |
-                        <a href="/?page=posts&action=delete&id=<?= $post['id'] ?>">Удалить</a>
                         <button type="button" data-id="<?= $post['id'] ?>" class="btn deleteBtn">Удалить</button>
                     </div>
+
                 </div>
                 <p><strong>Автор:</strong> <?= htmlspecialchars($post['author']) ?> | <?= htmlspecialchars($post['date']) ?></p>
                 <div class="post-title">
                     <p><?= htmlspecialchars(substr($post['content'], 0, 150)) ?>...</p>
-                    <button data-id="<?= htmlspecialchars($post['id'] ?? 0) ?>" class="like" type="button" value="<?= htmlspecialchars($post['like'] ?? 0) ?>">💗<?= htmlspecialchars($post['like'] ?? 0) ?></button>
-                    <!-- <a href="/posts.php?action=like&id=<?= $post['id'] ?>">💗<?= htmlspecialchars($post['like'] ?? 0) ?></a> -->
+                    <button data-id="<?= htmlspecialchars($post['id'] ?? 0) ?>" class="like" type="button" value="<?= htmlspecialchars($post['likes'] ?? 0) ?>">💗 <?= htmlspecialchars($post['like_count'] ?? $post['likes'] ?? 0) ?></button>
+
                 </div>
                 <hr>
             </div>
@@ -56,6 +57,11 @@
                                     break;
                                 case 'error':
                                     console.error('Ошибка: Невозможно удалить этот пост');
+                                    messagesBox.innerHTML = '';
+                                    const errorText = document.createElement('p');
+                                    errorText.innerText = result.result;
+                                    errorText.classList.add('error');
+                                    messagesBox.appendChild(errorText);
                                     break;
                                 default:
                                     console.error('Ошибка: неверный формат ответа');

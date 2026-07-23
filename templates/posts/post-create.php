@@ -36,7 +36,7 @@
     <?php endif; ?>
     <label for="author">
         Автор поста:
-        <input type="text" name="author" value="<?= htmlspecialchars($author ?? '') ?>">
+        <input type="text" placeholder="<?= $_SESSION['user']['nickname'] ?>" name="author" value="<?= htmlspecialchars($author ?? '') ?>">
     </label>
     <?php if (!empty($errors['author'])): ?>
         <p class="error"><?= htmlspecialchars($errors['author']) ?></p>

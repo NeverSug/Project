@@ -2,21 +2,25 @@
 
 namespace App;
 
-function saveCategory(string $name, string $slug, string $description): int
+function saveCategory(array $newCategory): int
 {
-    $category = getCategories();
-    $category[] = [
-        'name' => $name,
-        'slug' => $slug,
-        'description' => $description,
-    ];
-    $lastKey = array_key_last($category);
-    $category[$lastKey]['id'] = $lastKey;
-    $category[$lastKey] = array_merge(['id' => $lastKey], $category[$lastKey]);
-    $data = dirname(__DIR__) . '/data/categories.json';
-    writeFileData($data, $category);
+    $db = getDB();
 
-    return $lastKey;
+    $sql = 'INSERT INTO categories (name, slug, description)
+            VALUES (:name, :slug, :description)';
+
+    $stmt = $db->prepare($sql);
+
+    $params = [
+        ':name' => $newCategory['name'] ?? '',
+        ':slug'      => $newCategory['slug'] ?? '',
+        ':description'    => $newCategory['description'] ?? '',
+    ];
+
+    $stmt->execute($params);
+
+
+    return (int)$db->lastInsertId();
 }
 function getPostsCategoriesBySlug(string $slug): array
 {
@@ -27,46 +31,53 @@ function getPostsCategoriesBySlug(string $slug): array
 
 function getPostsCategoriesById(int $id): array
 {
-    $posts = getPosts();
 
-    $filteredPosts = array_filter($posts, function ($post) use ($id) {
-        return isset($post['category_id']) && $post['category_id'] === $id;
-    });
+    $db = getDB();
 
-    return array_values($filteredPosts);
+    $sql = 'SELECT * FROM posts WHERE category_id = :category_id';
+    $stmt = $db->prepare($sql);
+    $stmt->execute([':category_id' => $id]);
+
+    return $stmt->fetchAll();
 }
 
 
 function getCategoryBySlug(string $slug): array
 {
-    $categories = getCategories();
+    $db = getDB();
+    $stmt = $db->prepare('SELECT * FROM categories WHERE slug = :slug');
+    $stmt->execute([':slug' => $slug]);
+    $category = $stmt->fetch();
 
-    $filtered = array_filter($categories, fn($cat) => $cat['slug'] === $slug);
 
-
-    if (empty($filtered)) {
+    if (!$category) {
         throw new \OutOfBoundsException("Категория с slug '{$slug}' не найдена");
     }
 
-    return array_values($filtered)[0];
+    return $category;
 }
 
-function getCategoryById(int $id): array
+function getCategoryById(int $id): ?array
 {
-    $category = getCategories();
+    $db = getDB();
+    $stmt = $db->prepare('SELECT * FROM categories WHERE id = :id');
+    $stmt->execute([':id' => $id]);
+    $category = $stmt->fetch();
 
-    if (!isset($category[$id])) {
+    if (isset($category)) {
         throw new \OutOfBoundsException("Категория не найдена");
     }
 
-    return $category[$id];
+    return $category;
 }
 
 function getCategories()
 {
-    $categoriesData = readFileData('/data/categories.json');
-    if (!$categoriesData) {
+    $db = getDB();
+    $stmt = $db->query("SELECT * FROM categories");
+    $categories = $stmt->fetchAll();
+    if (!$categories) {
         throw new \RuntimeException("Ошибка сервера");
     }
-    return decodeData($categoriesData);
+    return $categories;
 }

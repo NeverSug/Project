@@ -3,6 +3,8 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use function App\redirectToError;
 
+session_start();
+
 $page = (string)($_GET['page'] ?? 'index');
 $controllerFunctionName = "App\\Controllers\\" . $page . "Controllers";
 
@@ -34,5 +36,5 @@ try {
         'trace' => $e->getTraceAsString()
     ];
     error_log(json_encode($errorDetails, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    redirectToError(500, $e->getMessage(), $errorId);
+    redirectToError(500);
 }

@@ -11,10 +11,10 @@
             <div class="contentText">
                 <div>
 
-                    <h1><?= htmlspecialchars($post['title']) ?></h1>
-                    <p><strong>Автор:</strong> <?= htmlspecialchars($post['author']) ?></p>
-                    <p><strong>Дата:</strong> <?= htmlspecialchars($post['date']) ?></p>
-                    <p><strong>Категория:</strong> <?= htmlspecialchars($categories[$post['category_id']]['name']) ?></p>
+                    <h1><?= htmlspecialchars($post['title'] ?? '') ?></h1>
+                    <p><strong>Автор:</strong> <?= htmlspecialchars($post['author'] ?? '') ?></p>
+                    <p><strong>Дата:</strong> <?= htmlspecialchars($post['date'] ?? '') ?></p>
+                    <p><strong>Категория:</strong> <?= htmlspecialchars($categories['name'] ?? '') ?></p>
                 </div>
                 <div>
                     <div class="content">
@@ -24,13 +24,19 @@
                                 <img src="/upload/<?= htmlspecialchars($post['image'] ?? '') ?>" alt="<?= htmlspecialchars($post['image'] ?? '') ?>">
                             <?php endif; ?>
                         </div>
-                        <p><?= htmlspecialchars($post['content']) ?></p>
+                        <p><?= htmlspecialchars($post['content'] ?? '') ?></p>
                     </div>
                     <div class="contentLike">
 
-                        <button data-id="<?= htmlspecialchars($post['id'] ?? 0) ?>" class="like" type="button" value="<?= htmlspecialchars($post['like'] ?? 0) ?>">💗<?= htmlspecialchars($post['like'] ?? 0) ?></button>
+                        <button data-id="<?= htmlspecialchars($post['id'] ?? 0) ?>" class="like" type="button" value="<?= htmlspecialchars($post['liked'] ?? 0) ?>">💗 <?= htmlspecialchars($post['like_count'] ?? $post['likes'] ?? 0) ?></button>
                         <div id="messages"></div>
                     </div>
+                    <?php if (($user && !empty($user['is_admin']))): ?>
+                        <div>
+                            <a href="/?page=postedit&action=edit&id=<?= $post['id'] ?>">Редактировать</a> |
+                            <a href="/?page=posts&action=delete&id=<?= $post['id'] ?>">Удалить</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -55,7 +61,6 @@
                         const result = await response.json();
                         switch (result.status) {
                             case 'success':
-                                const count = button.value;
                                 button.textContent = `💗 ${result.count}`;
                                 button.classList.add('like-button');
                                 setTimeout(() => button.classList.remove('like-button'), 1500);

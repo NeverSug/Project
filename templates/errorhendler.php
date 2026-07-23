@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $titleSite ?></title>
+    <title><?= htmlspecialchars($titleSite ?? '') ?></title>
     <link rel="stylesheet" href="/css/style.css">
     <style>
         body {
@@ -27,7 +27,7 @@
     <h1 class="error"><?= htmlspecialchars($errorCode . ' ' . $config['title']) ?></h1>
     <?php if (isset($errorId)): ?>
         <div class="error-container">
-            <h1>Код ошибки:</h1> <?= htmlspecialchars($errorId) ?>
+            <h1>Код ошибки:</h1> <?= htmlspecialchars($errorId ?? '') ?>
             <br>
             <p>Пожалуйста, сообщите этот код в службу поддержки</p>
         </div>
@@ -37,7 +37,7 @@
         <h3>Что можно сделать:</h3>
         <ul>
             <?php foreach ($config['suggestions'] as $suggestion): ?>
-                <li><?= $suggestion ?></li>
+                <li><?= htmlspecialchars($suggestion ?? '') ?></li>
             <?php endforeach; ?>
         </ul>
     </div>

@@ -2,73 +2,105 @@
 
 namespace App;
 
-function deletePost(int $id)
+function deletePost(int $id): void
 {
-    $posts = getPosts();
-    unset($posts[$id]);
-    $data = dirname(__DIR__) . '/data/posts.json';
-    writeFileData($data, $posts);
+    $db = getDB();
+    $stmt = $db->prepare('DELETE FROM posts WHERE id = ?');
+    $stmt->execute([$id]);
+    if ($stmt->rowCount() === 0) {
+        throw new \InvalidArgumentException('Некорректный ID поста');
+    }
 }
 
-function updatePost(array $post): void
+function updatePost(array $post, array $user): void
 {
-    $id = $post['id'];
-    $posts = getPosts();
-    $posts[$id] = [
-        ...$post,
-        ...[
-            'date'      => $posts[$id]['date'] ?? date('Y-m-d H:i:s'),
-            'author'    => $posts[$id]['author'] ?? 'Guest',
-            'like' => $posts[$id]['like']
-        ]
-    ];
-
-    $data = dirname(__DIR__) . '/data/posts.json';
-    writeFileData($data, $posts);
-}
-function savePost(array $newPost): int
-{
-    $posts = getPosts();
-    $postToSave = [
-        'category_id' => $newPost['category_id'] ?? null,
-        'title'     => $newPost['title'] ?? '',
-        'content'   => $newPost['content'] ?? '',
-        'date'      => $newPost['date'] ?? date('Y-m-d H:i:s'),
-        'author'    => $newPost['author'] ?? '',
-        'image' => $newPost['image'] ?? null
-    ];
-    $posts[] = $postToSave;
-    $lastKey = array_key_last($posts);
-    $posts[$lastKey]['id'] = $lastKey;
-    $posts[$lastKey] = array_merge(['id' => $lastKey], $posts[$lastKey]);
-    uasort($posts, function ($a, $b) {
-        return $b['id'] <=> $a['id'];
-    });
-    $firstPost = reset($posts);
-    $newId = $firstPost['id'];
-    $data = dirname(__DIR__) . '/data/posts.json';
-    writeFileData($data, $posts);
-
-    return $newId;
-}
-
-function getPost(int $id): array
-{
-    $posts = getPosts();
-    if (!isset($posts[$id])) {
-        throw new \OutOfBoundsException("Пост не найден");
+    if ($post['user_id'] !== $user['id']) {
+        throw new \InvalidArgumentException('Вы не можете редактировать этот пост');
     }
 
-    return $posts[$id];
+    $db = getDB();
+
+    if (empty($post['id']) || !is_numeric($post['id'])) {
+        throw new \InvalidArgumentException('Некорректный ID поста');
+    }
+
+    $id = (int)$post['id'];
+
+    $sql = 'UPDATE posts
+            SET "title" = :title,
+                "category_id" = :category_id,
+                "content" = :content,
+                "date" = :date,
+                "author" = :author,
+                "image" = :image
+            WHERE id = :id';
+
+    $stmt = $db->prepare($sql);
+
+    $params = [
+        ':title'      => $post['title'] ?? '',
+        ':category_id' => $post['category_id'] ?? null,
+        ':content'    => $post['content'] ?? '',
+        ':date'       => $post['date'] ?? date('Y-m-d H:i:s'),
+        ':author'     => $post['author'] ?? '',
+        ':image'      => $post['image'] ?? null,
+        ':id'         => $id,
+    ];
+
+    $stmt->execute($params);
+    if ($stmt->rowCount() === 0) {
+        throw new \RuntimeException('Пост с ID ' . $id . ' не найден');
+    }
 }
-function getPosts(): array
+
+function savePost(array $newPost): int
 {
+    $db = getDB();
 
-    $postsData = readFileData('/data/posts.json');
+    $sql = 'INSERT INTO posts (category_id, title, content, date, author, image, user_id)
+            VALUES (:category_id, :title, :content, :date, :author, :image, :user_id)';
 
-    if (!$postsData) {
+    $stmt = $db->prepare($sql);
+    $params = [
+        ':category_id' => $newPost['category_id'] ?? null,
+        ':title'      => $newPost['title'] ?? '',
+        ':content'    => $newPost['content'] ?? '',
+        ':date'       => $newPost['date'] ?? date('Y-m-d H:i:s'),
+        ':author'     => $newPost['author'] ?? '',
+        ':image'      => $newPost['image'] ?? null,
+        ':user_id'      => $newPost['user_id'] ?? null,
+    ];
+
+    $stmt->execute($params);
+
+
+
+    return (int)$db->lastInsertId();
+}
+
+function getPost(int $id, ?int $user_id = null): ?array
+{
+    $db = getDB();
+
+    $stmt = $db->prepare('SELECT * FROM posts WHERE id = :id');
+    $stmt->execute([':id' => $id]);
+
+    $post = $stmt->fetch(\PDO::FETCH_ASSOC);
+    if (!$post) {
+        return null;
+    }
+
+    return $post;
+}
+function getPosts()
+{
+    $db = getDB();
+    $stmt = $db->query("SELECT * FROM posts ORDER BY id DESC");
+    $posts = $stmt->fetchAll();
+
+    if (!$posts) {
         throw new \RuntimeException("Ошибка сервера");
     }
 
-    return decodeData($postsData);
+    return $posts;
 }

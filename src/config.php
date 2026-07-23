@@ -19,4 +19,7 @@ const CONTROLLERS = [
     'calculator' => 'calculatorControllers',
     'category' => 'categoryControllers',
     'categorycreate' => 'categoryControllers',
+    'login' => 'userControllers',
+    'logout' => 'userControllers',
+    'registrired' => 'userControllers',
 ];

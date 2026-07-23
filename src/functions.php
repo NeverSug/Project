@@ -28,7 +28,7 @@ function renderTemplate(string $page, $params = []): string
     return ob_get_clean();
 }
 
-function writeFileData(string $data, array $posts)
+function writeFileData(string $data, array $posts): void
 {
     $result = file_put_contents($data, json_encode($posts, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     if (!$result) {
